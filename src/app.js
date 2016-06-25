@@ -34,7 +34,7 @@ app.model({
       }
     },
     getData: (action, state, send) => {
-      http.get('/kernel.txt', (err, res, body) => { // if you're messing with this with the dev server, change to 'dist/kernel.txt'
+      http.get('/kernel.txt', (err, res, body) => {
         if (err) console.log(err)
 
         send('addText', { payload: body })
@@ -52,16 +52,14 @@ const codeLiner = (text, index) => {
 
   const container = document.createElement('span')
   container.innerHTML = formattedText
-
-  return choo.view`<p>${container}${cursor}</p>`
+  return choo.view`${container}`
 }
-const cursor = choo.view`<span class="cursor">|</span>`
 
 const mainView = (params, state, send) => {
   if (state.text === null) send('getData')
   return choo.view`
     <div>
-      ${codeLiner(state.text, state.index)}
+      <p>${codeLiner(state.text, state.index)}<span class="cursor">|</span></p>
     </div>`
 }
 

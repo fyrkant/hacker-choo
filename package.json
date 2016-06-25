@@ -7,7 +7,7 @@
     "deploy": "npm run compile && firebase deploy",
     "lint": "standard src/**/*.js",
     "lint:fix": "standard-format -w src/",
-    "start": "npm run copy && budo src/app.js --serve=dist/app.js --open --live --pushstate -- ",
+    "start": "npm run copy && budo src/app.js --serve=dist/app.js --open --dir=dist --live --pushstate -- ",
     "copy": "mkdir -p dist && cp src/index.html src/kernel.txt dist/",
     "compile": "npm run copy && browserify src/app.js | uglifyjs -c > dist/app.js "
   },
