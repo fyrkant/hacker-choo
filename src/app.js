@@ -9,8 +9,7 @@ const app = choo()
 app.model({
   state: {
     index: 0,
-    text: null,
-    text2: null
+    text: null
   },
   reducers: {
     addText: (action, state) => ({ text: action.payload }),
@@ -35,7 +34,7 @@ app.model({
       }
     },
     getData: (action, state, send) => {
-      http.get('/kernel.txt', (err, res, body) => {
+      http.get('/kernel.txt', (err, res, body) => { // if you're messing with this with the dev server, change to 'dist/kernel.txt'
         if (err) console.log(err)
 
         send('addText', { payload: body })
@@ -46,13 +45,10 @@ app.model({
 })
 
 const codeLiner = (text, index) => {
-  var rtn = new RegExp('\n', 'g') // eslint-disable-line no-control-regex
-  var rts = new RegExp('\\s', 'g') // whitespace regex
-  var rtt = new RegExp('\\t', 'g') // tab regex
   const formattedText = text && text.substr(0, index)
-                                    .replace(rtn, '<br/>')
-                                    .replace(rtt, '&nbsp;&nbsp;&nbsp;&nbsp;')
-                                    .replace(rts, '&nbsp;')
+                                    .replace(/\n/g, '<br/>')
+                                    .replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;')
+                                    .replace(/\s/g, '&nbsp;')
 
   const container = document.createElement('span')
   container.innerHTML = formattedText
