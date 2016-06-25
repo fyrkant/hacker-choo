@@ -24,6 +24,7 @@ app.model({
   ],
   effects: {
     handleKeyDown: (action, state, send) => {
+      send('scrollToBottom')
       if (action.payload === 8) {
         send('decreasIndex')
       } else {
@@ -36,7 +37,8 @@ app.model({
 
         send('addText', { payload: body })
       })
-    }
+    },
+    scrollToBottom: () => window.scrollTo(0, document.body.scrollHeight)
   }
 })
 
