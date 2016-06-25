@@ -19,13 +19,16 @@ app.model({
   },
   subscriptions: [
     function (send) {
-      onkeydown = (e) => send('handleKeyDown', { payload: e.keyCode })
+      onkeydown = (e) => {
+        e.preventDefault()
+        send('handleKeyDown', { payload: e })
+      }
     }
   ],
   effects: {
     handleKeyDown: (action, state, send) => {
       send('scrollToBottom')
-      if (action.payload === 8) {
+      if (action.payload.keyCode === 8) {
         send('decreasIndex')
       } else {
         send('increaseIndex')
