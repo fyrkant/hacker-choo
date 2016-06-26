@@ -3,7 +3,8 @@ body {
   color: #0f0;
 }
 
-p {
+p, span {
+  white-space: pre;
   font-family: monospace;
 }
 

@@ -14,11 +14,11 @@ app.model({
   reducers: {
     addText: (action, state) => ({ text: action.payload }),
     increaseIndex: (action, state) => ({ index: state.index + 3 }),
-    decreasIndex: (action, state) => ({ index: state.index - 3 })
+    decreasIndex: (action, state) => ({ index: state.index === 0 ? 0 : state.index - 3 })
   },
   subscriptions: [
     function (send) {
-      onkeydown = (e) => {
+      onkeydown = (e) => { // eslint-disable-line
         e.preventDefault()
         send('handleKeyDown', { payload: e })
       }
@@ -45,21 +45,23 @@ app.model({
 })
 
 const codeLiner = (text, index) => {
-  const formattedText = text && text.substr(0, index)
-                                    .replace(/\n/g, '<br/>')
-                                    .replace(/\t/g, '&nbsp;&nbsp;&nbsp;&nbsp;')
-                                    .replace(/\s/g, '&nbsp;')
+  const cursor = choo.view`<span class="cursor">|</span>`
+  const formattedText = text &&
+    text.substr(0, index)
+        .split(/\n/)
+        .filter(line => line !== '')
+        .map((line, i, a) => i === a.length - 1
+          ? choo.view`<p>${line}${cursor}</p>`
+          : choo.view`<p>${line}</p>`)
 
-  const container = document.createElement('span')
-  container.innerHTML = formattedText
-  return choo.view`${container}`
+  return index === 0 ? choo.view`<p>${cursor}</p>` : formattedText
 }
 
 const mainView = (params, state, send) => {
   if (state.text === null) send('getData')
   return choo.view`
     <div>
-      <p>${codeLiner(state.text, state.index)}<span class="cursor">|</span></p>
+      ${codeLiner(state.text, state.index)}
     </div>`
 }
 
